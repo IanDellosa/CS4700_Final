@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/MicheTerrain.unity
+    guid: 4e9ff7215789b714e925e42c0b1496ad
   m_configObjects: {}

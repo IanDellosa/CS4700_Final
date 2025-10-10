@@ -214,8 +214,13 @@ GameObject:
   - component: {fileID: 4703553936191659956}
   - component: {fileID: 6178811645479641581}
   - component: {fileID: 2081595575574890930}
+<<<<<<< HEAD
   - component: {fileID: 2716042492770273203}
   - component: {fileID: -3031565580546702486}
+=======
+  - component: {fileID: -5727890078543960928}
+  - component: {fileID: 5584637954876750110}
+>>>>>>> main
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Untagged
@@ -309,7 +314,11 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+<<<<<<< HEAD
 --- !u!136 &2716042492770273203
+=======
+--- !u!136 &-5727890078543960928
+>>>>>>> main
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

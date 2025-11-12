@@ -13,6 +13,7 @@ public class PlayerCam : NetworkBehaviour
     [SerializeField] private float xRot;
     [SerializeField] private float yRot;
 
+
     private void Start()
     {
         if(!IsOwner) return;

@@ -36,7 +36,8 @@ public class InventorySystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && !isOpen)
         {
-
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             Debug.Log("e is pressed");
             inventoryScreenUI.SetActive(true);
             isOpen = true;
@@ -44,6 +45,8 @@ public class InventorySystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E) && isOpen)
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             inventoryScreenUI.SetActive(false);
             isOpen = false;
         }

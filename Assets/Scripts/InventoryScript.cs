@@ -9,6 +9,10 @@ public class InventorySystem : MonoBehaviour
     public static InventorySystem Instance { get; set; }
 
     public GameObject inventoryScreenUI;
+
+    public List<GameObject> slotList = new List<GameObject>();
+
+
     public bool isOpen;
 
 
@@ -36,7 +40,7 @@ public class InventorySystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && !isOpen)
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Debug.Log("e is pressed");
             inventoryScreenUI.SetActive(true);

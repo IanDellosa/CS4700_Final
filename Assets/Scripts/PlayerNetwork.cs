@@ -20,6 +20,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         if (!IsOwner) return;
 
+        // DELETE LATER
         if (Input.GetKeyDown(KeyCode.T))
         {
             spawnObjServerRpc();
@@ -29,17 +30,21 @@ public class PlayerNetwork : NetworkBehaviour
         {
             deleteObjServerRpc();
         }
+        // DELETE LATER END
 
         if (IsLocalPlayer)
         {
             firstPersonCam.gameObject.SetActive(true);
         }
 
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen)
+        {
+            horizontalInput = Input.GetAxis("Horizontal");
+            verticalInput = Input.GetAxis("Vertical");
 
-        float moveSpeed = 10f;
-        transform.position += (horizontalInput * orientation.right + verticalInput * orientation.forward) * moveSpeed * Time.deltaTime;
+            float moveSpeed = 10f;
+            transform.position += (horizontalInput * orientation.right + verticalInput * orientation.forward) * moveSpeed * Time.deltaTime;
+        }
     }
 
     [ServerRpc]

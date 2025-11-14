@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
 
-    [SerializeField] private Canvas canvas;
+    private Canvas canvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 
@@ -19,10 +19,9 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     private void Awake()
     {
-
+        canvas = FindFirstObjectByType<Canvas>();
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-
     }
 
 

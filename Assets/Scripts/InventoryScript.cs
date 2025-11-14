@@ -9,7 +9,16 @@ public class InventorySystem : MonoBehaviour
     public static InventorySystem Instance { get; set; }
 
     public GameObject inventoryScreenUI;
+
+    public List<GameObject> slotList = new List<GameObject>();
+    public List<string> itemList = new List<string>();
+
+    private GameObject itemToAdd;
+
+    private GameObject whatSlotToEquip;
+
     public bool isOpen;
+    public bool isFull;
 
 
     private void Awake()
@@ -28,20 +37,31 @@ public class InventorySystem : MonoBehaviour
     void Start()
     {
         isOpen = false;
+
+        populateSlotList();
     }
 
+    private void populateSlotList()
+    {
+        foreach(Transform child in inventoryScreenUI.transform)
+        {
+            if (child.CompareTag("Slot"))
+            {
+                slotList.Add(child.gameObject);
+            }
+        }
+    }
 
     void Update()
     {
 
         if (Input.GetKeyDown(KeyCode.E) && !isOpen)
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Debug.Log("e is pressed");
             inventoryScreenUI.SetActive(true);
             isOpen = true;
-
         }
         else if (Input.GetKeyDown(KeyCode.E) && isOpen)
         {
@@ -52,4 +72,40 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    public void addToInv(String itemName)
+    {
+        whatSlotToEquip = FindNextEmptySlot();
+        itemToAdd = Instantiate(Resources.Load<GameObject>(itemName), whatSlotToEquip.transform.position, whatSlotToEquip.transform.rotation);
+        itemToAdd.transform.SetParent(whatSlotToEquip.transform);
+
+        itemList.Add(itemName);
+        
+    }
+
+    private GameObject FindNextEmptySlot()
+    {
+        foreach (GameObject slot in slotList)
+        {
+            if (slot.transform.childCount == 0)
+            {
+                return slot;
+            }
+        }
+
+        return new GameObject();
+    }
+
+    public bool checkIfFull()
+    {
+        foreach (GameObject slot in slotList)
+        {
+            if(slot.transform.childCount == 0)
+            {
+                isFull = false;
+                return false;
+            }
+        }
+        isFull = true;
+        return true;
+    }
 }

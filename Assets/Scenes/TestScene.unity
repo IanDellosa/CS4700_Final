@@ -3830,7 +3830,7 @@ MonoBehaviour:
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
-    Port: 7779
+    Port: 7780
     ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
@@ -3854,8 +3854,7 @@ MonoBehaviour:
     NetworkTransport: {fileID: 1464028602}
     PlayerPrefab: {fileID: 2304880060082445691, guid: c79e55faeb76176488602fd08a161a8a, type: 3}
     Prefabs:
-      NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 1909b4dc85da9324692bd051a514371a, type: 2}
+      NetworkPrefabsLists: []
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -5983,6 +5982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem
   inventoryScreenUI: {fileID: 1765906542}
+  slotList: []
   isOpen: 0
 --- !u!4 &2095816013
 Transform:

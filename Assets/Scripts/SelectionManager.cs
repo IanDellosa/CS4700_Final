@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
 
-public class SelectionManager : NetworkBehaviour
+public class SelectionManager : MonoBehaviour
 {
-
+    public Camera cam;
     public GameObject interaction_Info_UI;
     TextMeshProUGUI interaction_text;
     public bool onTarget;
@@ -17,14 +17,14 @@ public class SelectionManager : NetworkBehaviour
 
     public void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
+        //if (Instance != null && Instance != this)
+        //{
+        //    Destroy(gameObject);
+        //}
+        //else
+        //{
+        //    Instance = this;
+        //}
     }
 
     private void Start()
@@ -36,8 +36,9 @@ public class SelectionManager : NetworkBehaviour
 
     void Update()
     {
-        if (!IsOwner) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (!IsOwner) return;
+        if (!cam) return;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {

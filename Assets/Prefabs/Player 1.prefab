@@ -377,8 +377,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d94df31f73bfb443a3b59e9d4be6769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectionManager
-  ShowTopMostFoldoutHeaderGroup: 1
+  cam: {fileID: 0}
   interaction_Info_UI: {fileID: 5856709012928884117}
+  onTarget: 0
 --- !u!1 &3461574267000829745
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,8 +424,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d94df31f73bfb443a3b59e9d4be6769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectionManager
-  ShowTopMostFoldoutHeaderGroup: 1
+  cam: {fileID: 6467678156998556073}
   interaction_Info_UI: {fileID: 5856709012928884117}
+  onTarget: 0
 --- !u!1 &5650537096282069822
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class PlayerCam : NetworkBehaviour
     {
         if(!IsOwner) return;
 
-        if (!InventorySystem.Instance.isOpen) {
+        if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen) {
             //mouse input
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
             float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
@@ -37,6 +37,10 @@ public class PlayerCam : NetworkBehaviour
             // orientation
             transform.rotation = Quaternion.Euler(xRot, yRot, 0);
             orientation.rotation = Quaternion.Euler(0, yRot, 0);
+        }
+        else
+        {
+            gameObject.transform.parent.GetComponent<Rigidbody>().freezeRotation = true;
         }
     }
 }

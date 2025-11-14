@@ -21,7 +21,6 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     {
         canvas = FindFirstObjectByType<Canvas>();
         rectTransform = GetComponent<RectTransform>();
-        rectTransform.position = transform.parent.position;
         canvasGroup = GetComponent<CanvasGroup>();
     }
 

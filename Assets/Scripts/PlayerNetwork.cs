@@ -37,7 +37,7 @@ public class PlayerNetwork : NetworkBehaviour
             firstPersonCam.gameObject.SetActive(true);
         }
 
-        if (!InventorySystem.Instance.isOpen)
+        if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen)
         {
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");

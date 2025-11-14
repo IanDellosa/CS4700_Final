@@ -12,6 +12,7 @@ public class SelectionManager : MonoBehaviour
     public GameObject interaction_Info_UI;
     TextMeshProUGUI interaction_text;
     public bool onTarget;
+    public GameObject selectedObject;
 
     public static SelectionManager Instance { get; private set; }
 
@@ -46,6 +47,7 @@ public class SelectionManager : MonoBehaviour
             InteractableObject interactable = selectionTransform.GetComponent<InteractableObject>();
             if (interactable && interactable.inRange)
             {
+                selectedObject = interactable.gameObject;
                 interaction_text.text = interactable.GetItemName();
                 interaction_Info_UI.SetActive(true);
                 onTarget = true;

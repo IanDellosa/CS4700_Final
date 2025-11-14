@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class InteractableObject : MonoBehaviour
+public class InteractableObject : NetworkBehaviour
 {
     public string ItemName;
     public bool inRange;
+    public SelectionManager sm;
+    public bool canPickup;
 
     public string GetItemName()
     {
@@ -30,13 +34,33 @@ public class InteractableObject : MonoBehaviour
 
     public void Update()
     {
-        if (inRange && Input.GetKeyDown(KeyCode.F) && SelectionManager.Instance.onTarget)
+        sm = FindFirstObjectByType<SelectionManager>();
+        if (Input.GetKeyDown(KeyCode.F) && inRange && sm.onTarget && canPickup && sm.selectedObject==gameObject)
         {
-            Debug.Log("Item added to inv");
-            Destroy(gameObject);
+            if (!InventorySystem.Instance.checkIfFull())
+            {
+                InventorySystem.Instance.addToInv(ItemName);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Log("Inv is full");
+            }
+            //pickUpItemServerRpc();
+            
         }
         {
 
         }
     }
+
+    //[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    //public void pickUpItemServerRpc()
+    //{
+    //    if (inRange && sm.onTarget)
+    //    {
+    //        Debug.Log("Item added to inv");
+    //        Destroy(gameObject);
+    //    }
+    //}
 }

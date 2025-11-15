@@ -34,9 +34,10 @@ public class PlayerNetwork : NetworkBehaviour
         {
             firstPersonCam.gameObject.SetActive(true);
         }
-
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen)
+        {
+            horizontalInput = Input.GetAxis("Horizontal");
+            verticalInput = Input.GetAxis("Vertical");
 
         float moveSpeed = 10f;
         transform.position += (horizontalInput * orientation.right + verticalInput * orientation.forward) * moveSpeed * Time.deltaTime;

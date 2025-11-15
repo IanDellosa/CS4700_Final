@@ -21,6 +21,7 @@ public class CraftingSystem : MonoBehaviour
     public bool isOpen;
 
     // All Blueprints
+    public itemBlueprint leverBlueprint = new itemBlueprint("Lever", "Stone", "Stick", 3, 2, 2);
 
     public static CraftingSystem Instance { get; set; }
 
@@ -45,19 +46,44 @@ public class CraftingSystem : MonoBehaviour
         leverReq2 = craftingScreenUI.transform.Find("Lever").Find("req2").GetComponent<TextMeshProUGUI>();
 
         craftLeverBtn = craftingScreenUI.transform.Find("Lever").transform.Find("Button").GetComponent<Button>();
-        craftLeverBtn.onClick.AddListener(delegate { CraftAnyItem(); });
+        craftLeverBtn.onClick.AddListener(delegate { CraftAnyItem(leverBlueprint); });
     }
 
-    void CraftAnyItem()
+    void CraftAnyItem(itemBlueprint blueprint)
     {
-        // add item to inv
+        switch (blueprint.numOfReqs)
+        {
+            case 2:
+                InventorySystem.Instance.RemoveItem(blueprint.req2, blueprint.req2Amt);
+                goto case 1;
+            case 1:
+                InventorySystem.Instance.RemoveItem(blueprint.req1, blueprint.req1Amt);
+                break;
+            default:
+                Debug.Log("Crafting error");
+                break;
+        }
 
+        RefreshNeededItems();
 
+        StartCoroutine(Calculate());
+
+        InventorySystem.Instance.addToInv(blueprint.itemName);
+
+    }
+
+    public IEnumerator Calculate()
+    {
+        yield return new WaitForSeconds(0.01f);
+
+        InventorySystem.Instance.ReCalculateList();
     }
 
     // Update is called once per frame
     void Update()
     {
+        RefreshNeededItems();
+
         if (Input.GetKeyDown(KeyCode.C) && !isOpen)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -68,10 +94,50 @@ public class CraftingSystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.C) && isOpen)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
             craftingScreenUI.SetActive(false);
+            if (!InventorySystem.Instance.isOpen) {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+                        
             isOpen = false;
         }
+    }
+
+    private void RefreshNeededItems()
+    {
+        int stoneCount = 0;
+        int stickCount = 0;
+
+        invItemList = InventorySystem.Instance.itemList;
+
+        foreach (string item in invItemList)
+        {
+            switch (item)
+            {
+                case "Stone":
+                    stoneCount++;
+                    break;
+                case "Stick":
+                    stickCount++;
+                    break;
+
+            }
+        }
+
+        // -----LEVER-----
+        leverReq1.text = "3 Stone [" + stoneCount + "]";
+        leverReq2.text = "2 Stick [" + stickCount + "]";
+
+        if(stoneCount >= 3 && stickCount >= 2)
+        {
+            craftLeverBtn.gameObject.SetActive(true);
+        } else
+        {
+            craftLeverBtn.gameObject.SetActive(false);
+        }
+
+
+
     }
 }

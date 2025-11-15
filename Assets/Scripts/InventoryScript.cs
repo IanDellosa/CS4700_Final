@@ -65,9 +65,13 @@ public class InventorySystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E) && isOpen)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
             inventoryScreenUI.SetActive(false);
+            if (!CraftingSystem.Instance.isOpen)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            
             isOpen = false;
         }
     }
@@ -107,5 +111,41 @@ public class InventorySystem : MonoBehaviour
         }
         isFull = true;
         return true;
+    }
+
+    public void RemoveItem(string nameToRemove, int numToRemove)
+    {
+        int counter = numToRemove;
+
+        for (int i = slotList.Count - 1; i >= 0; i--)
+        {
+            if (slotList[i].transform.childCount > 0)
+            {
+                Debug.Log(nameToRemove);
+                if (slotList[i].transform.GetChild(0).name == nameToRemove+"(Clone)" && counter > 0)
+                {
+                    Debug.Log(slotList[i].transform.GetChild(0).name);
+                    Destroy(slotList[i].transform.GetChild(0).gameObject);
+                    counter--;
+                }
+            }
+        }
+    }
+
+    public void ReCalculateList()
+    {
+        itemList.Clear();
+
+        foreach(GameObject slot in slotList)
+        {
+            if(slot.transform.childCount > 0)
+            {
+                String name = slot.transform.GetChild(0).name;
+
+                name = name.Replace("(Clone)", "");
+
+                itemList.Add(name);
+            }
+        }
     }
 }

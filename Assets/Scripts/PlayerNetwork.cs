@@ -39,8 +39,9 @@ public class PlayerNetwork : NetworkBehaviour
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
 
-        float moveSpeed = 10f;
-        transform.position += (horizontalInput * orientation.right + verticalInput * orientation.forward) * moveSpeed * Time.deltaTime;
+            float moveSpeed = 10f;
+            transform.position += (horizontalInput * orientation.right + verticalInput * orientation.forward) * moveSpeed * Time.deltaTime;
+        }
     }
 
     [ServerRpc]

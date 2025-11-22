@@ -15,19 +15,30 @@ using UnityEngine.SceneManagement;
 public class TestLobby : MonoBehaviour
 {
 
+    public static TestLobby Instance { get; private set; }
+
+    public static bool IsHost { get; private set; }
+    public static string RelayJoinCode { get; private set; }
+
     public Lobby hostLobby;
     public Lobby joinedLobby;
+    public string relayCode;
     private float heartbeatTimer;
     private float lobbyUpdateTimer;
     private string playerName;
+
+    public bool gameStarted;
+    public GameObject LobbyUI;
 
     [SerializeField] private Button createLobbyButton;
     [SerializeField] private TMP_Text lobbyCode;
     [SerializeField] private Button joinLobbyButton;
     [SerializeField] private TMP_InputField enterLobbyCode;
+    [SerializeField] private Camera cam;
 
     private void Awake()
     {
+        Instance = this;
         createLobbyButton.onClick.AddListener(CreateLobby);
         joinLobbyButton.onClick.AddListener(handleJoinLobby);
     }
@@ -41,7 +52,7 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Signed in " + AuthenticationService.Instance.PlayerId);
         };
 
-       await AuthenticationService.Instance.SignInAnonymouslyAsync();
+       //await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
        playerName = "Lemonade" + UnityEngine.Random.Range(10, 99);
        Debug.Log(playerName);
@@ -52,13 +63,21 @@ public class TestLobby : MonoBehaviour
         HandleLobbyHeartbeat();
         HandleLobbyPollForUpdates();
 
+        
+
         if(joinedLobby != null)
         {
-            if (joinedLobby.Players.Count == 2)
+            //Debug.Log(joinedLobby.Players.Count);
+            if (joinedLobby.Players.Count == 2 && !gameStarted)
             {
-                SceneManager.LoadScene("TestScene");
+                StartGame();
             }
         }
+    }
+
+    public bool isLobbyHost()
+    {
+        return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
 
     private async void HandleLobbyHeartbeat()
@@ -88,6 +107,21 @@ public class TestLobby : MonoBehaviour
 
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
                 joinedLobby = lobby;
+
+                //Debug.Log(joinedLobby.Data["StartGame_RelayCode"].Value);
+
+                if (joinedLobby.Data["StartGame_RelayCode"].Value != "0")
+                {
+                    Debug.Log("Trying to join relay");
+                    if (!isLobbyHost())
+                    {
+                        TestRelay.Instance.JoinRelay(joinedLobby.Data["StartGame_RelayCode"].Value);
+                        Debug.Log("Relay connection success");
+                        cam.gameObject.SetActive(false);
+                        LobbyUI.gameObject.SetActive(false);
+                    }
+                    joinedLobby = null;
+                }
             }
         }
     }
@@ -103,16 +137,21 @@ public class TestLobby : MonoBehaviour
             {
                 IsPrivate = true,
                 Player = GetPlayer(),
-                //Data = new Dictionary<string, DataObject>
-                //{
+                Data = new Dictionary<string, DataObject>
+                {
+                    {"StartGame_RelayCode", new DataObject(DataObject.VisibilityOptions.Member, "0")}
                 //    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, "Classic") }
-                //}
+                }
             };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 
+            //relayCode = await TestRelay.Instance.CreateRelay();
+            //Debug.Log("Relay Code: " + relayCode);
+
             lobbyCode.text = "Lobby Code: " + lobby.LobbyCode;
 
+            IsHost = true;
             hostLobby = lobby;
             joinedLobby = hostLobby;
 
@@ -157,6 +196,7 @@ public class TestLobby : MonoBehaviour
 
             Debug.Log("Joined Lobby with code: " + lobbyCode);
             PrintPlayers(lobby);
+            
         }
         catch (LobbyServiceException ex)
         {
@@ -248,5 +288,33 @@ public class TestLobby : MonoBehaviour
         {
             Debug.Log(ex);
         }
+    }
+
+    public async void StartGame()
+    {
+        gameStarted = true;
+        if (isLobbyHost())
+        {
+            try
+            {
+                Debug.Log("StartGame");
+                string relayCode = await TestRelay.Instance.CreateRelay();
+
+                Lobby lobby = await LobbyService.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions
+                {
+                    Data = new Dictionary<string, DataObject>
+                {
+                    {"StartGame_RelayCode", new DataObject(DataObject.VisibilityOptions.Member, relayCode) }
+                }
+                });
+                joinedLobby = lobby;
+            }
+            catch (LobbyServiceException ex)
+            {
+                Debug.Log(ex);
+            }
+        }
+        cam.gameObject.SetActive(false);
+        LobbyUI.gameObject.SetActive(false);
     }
 }

@@ -84,7 +84,7 @@ public class CraftingSystem : MonoBehaviour
     {
         RefreshNeededItems();
 
-        if (Input.GetKeyDown(KeyCode.C) && !isOpen)
+        if (Input.GetKeyDown(KeyCode.C) && !isOpen && TestLobby.Instance.gameStarted)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -92,7 +92,7 @@ public class CraftingSystem : MonoBehaviour
             craftingScreenUI.SetActive(true);
             isOpen = true;
         }
-        else if (Input.GetKeyDown(KeyCode.C) && isOpen)
+        else if (Input.GetKeyDown(KeyCode.C) && isOpen && TestLobby.Instance.gameStarted)
         {
             craftingScreenUI.SetActive(false);
             if (!InventorySystem.Instance.isOpen) {

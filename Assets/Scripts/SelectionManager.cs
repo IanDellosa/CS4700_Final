@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
 
-public class SelectionManager : MonoBehaviour
+public class SelectionManager : NetworkBehaviour
 {
     public Camera cam;
     public GameObject interaction_Info_UI;
@@ -14,7 +14,6 @@ public class SelectionManager : MonoBehaviour
     public bool onTarget;
     public GameObject selectedObject;
 
-    public static SelectionManager Instance { get; private set; }
 
     public void Awake()
     {
@@ -37,7 +36,7 @@ public class SelectionManager : MonoBehaviour
 
     void Update()
     {
-        //if (!IsOwner) return;
+        if (!IsOwner) return;
         if (!cam) return;
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;

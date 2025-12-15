@@ -23,11 +23,7 @@ public class PlayerCam : NetworkBehaviour
     {
         if(!IsOwner) return;
 
-        if (TestLobby.Instance.gameStarted) 
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        
 
         if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen && TestLobby.Instance.gameStarted)
         {

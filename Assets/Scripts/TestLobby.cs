@@ -33,12 +33,16 @@ public class TestLobby : MonoBehaviour
     [SerializeField] private Button createLobbyButton;
     [SerializeField] private TMP_Text lobbyCode;
     [SerializeField] private Button joinLobbyButton;
+    [SerializeField] private Button joinLobbyCodeButton;
     [SerializeField] private TMP_InputField enterLobbyCode;
     [SerializeField] private Camera cam;
+    [SerializeField] private GameObject LobbyCodeUI;
+    [SerializeField] private GameObject joinLobbyUI;
 
     private void Awake()
     {
         Instance = this;
+        joinLobbyCodeButton.onClick.AddListener(openjoinLobbyUI);
         createLobbyButton.onClick.AddListener(CreateLobby);
         joinLobbyButton.onClick.AddListener(handleJoinLobby);
     }
@@ -128,6 +132,7 @@ public class TestLobby : MonoBehaviour
 
     private async void CreateLobby()
     {
+        LobbyCodeUI.SetActive(true);
         try
         {
             string lobbyName = "MyLobby";
@@ -212,6 +217,11 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    private void openjoinLobbyUI()
+    {
+        joinLobbyUI.SetActive(!joinLobbyUI.activeInHierarchy);
+    }
+
     private Player GetPlayer()
     {
         return new Player
@@ -293,6 +303,12 @@ public class TestLobby : MonoBehaviour
     public async void StartGame()
     {
         gameStarted = true;
+
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+
         if (isLobbyHost())
         {
             try

@@ -34,33 +34,28 @@ public class InteractableObject : NetworkBehaviour
 
     public void Update()
     {
-        sm = FindFirstObjectByType<SelectionManager>();
-        if (Input.GetKeyDown(KeyCode.F) && inRange && sm.onTarget && canPickup && sm.selectedObject==gameObject)
+        
+        if (Input.GetKeyDown(KeyCode.F) && inRange && canPickup) 
         {
             if (!InventorySystem.Instance.checkIfFull())
             {
                 InventorySystem.Instance.addToInv(ItemName);
-                Destroy(gameObject);
+                pickupItemRpc();
             }
             else
             {
                 Debug.Log("Inv is full");
             }
             //pickUpItemServerRpc();
-            
-        }
-        {
-
         }
     }
 
-    //[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    //public void pickUpItemServerRpc()
-    //{
-    //    if (inRange && sm.onTarget)
-    //    {
-    //        Debug.Log("Item added to inv");
-    //        Destroy(gameObject);
-    //    }
-    //}
+    [Rpc(SendTo.ClientsAndHost, InvokePermission = RpcInvokePermission.Everyone)]
+    public void pickupItemRpc() {
+        if (inRange)
+        {
+            Debug.Log("Item added to inv");
+            Destroy(gameObject);
+        }
+    }
 }

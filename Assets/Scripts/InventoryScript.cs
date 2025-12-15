@@ -55,7 +55,7 @@ public class InventorySystem : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.E) && !isOpen)
+        if (Input.GetKeyDown(KeyCode.E) && !isOpen && TestLobby.Instance.gameStarted)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -63,7 +63,7 @@ public class InventorySystem : MonoBehaviour
             inventoryScreenUI.SetActive(true);
             isOpen = true;
         }
-        else if (Input.GetKeyDown(KeyCode.E) && isOpen)
+        else if (Input.GetKeyDown(KeyCode.E) && isOpen && TestLobby.Instance.gameStarted)
         {
             inventoryScreenUI.SetActive(false);
             if (!CraftingSystem.Instance.isOpen)

@@ -16,15 +16,16 @@ public class PlayerCam : NetworkBehaviour
     private void Start()
     {
         if(!IsOwner) return;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        
     }
 
     private void Update()
     {
         if(!IsOwner) return;
 
-        if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen)
+        
+
+        if (!InventorySystem.Instance.isOpen && !CraftingSystem.Instance.isOpen && TestLobby.Instance.gameStarted)
         {
             //mouse input
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
